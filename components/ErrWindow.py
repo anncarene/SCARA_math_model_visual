@@ -1,8 +1,8 @@
-from zope.interface         import implementer
-from tkinter                import *
-from tkinter                import ttk
+from zope.interface                     import implementer
+from tkinter                            import *
+from tkinter                            import ttk
 
-from ErrWindowInterfaces    import *
+from interfaces.components.ErrWindow    import *
 
 @implementer(IErrWindow)
 class ErrWindow(Toplevel):
@@ -12,7 +12,7 @@ class ErrWindow(Toplevel):
         super().__init__()
         
         self.title("Ошибка")
-        self.geometry("750x50")
+        self.geometry("1000x50")
         
         self.protocol("WM_DELETE_WINDOW", lambda: self.dismiss())
         

@@ -1,28 +1,12 @@
-from abc                    import ABCMeta
-import numpy                as np
-from typing                 import Tuple, List
-from zope.interface         import provider
+from abc                            import ABCMeta
+from typing                         import Tuple, List
+from zope.interface                 import provider
 
-from ConvertingInterfaces   import *
+import numpy                        as np
 
-class ConvertingException(Exception):
-    """Класс исключений для конвертации"""
-    
-    def __init__(self, *args):
-        """Конструктор. Синтаксис вызова: __init__(message?: str, method?: str)"""
-        
-        self.message = args[0]
-        self.method = args[1]
-            
-    def __str__(self):
-        res = ""
-        
-        if self.method:
-            res += " в методе " + self.method
-        if self.message:
-            res += " обнаружена проблема: " + self.message
-            
-        return res
+from interfaces.backend.Converting  import *
+
+from backend.Exceptions             import ConvertingException
 
 @provider(IConvertingFactory)
 class Converting():
@@ -62,7 +46,7 @@ class Converting():
         if x == 0. and y > 0:
             return np.pi / 2, r
         if x == 0. and y < 0:
-            return 3 * np.pi / 2, r
+            return - np.pi / 2, r
         
         raise ConvertingException(
             "недопустимое преобразование",
@@ -88,7 +72,7 @@ class Converting():
         return x, y
     
     @staticmethod
-    def teta(r, a) -> float:
+    def teta(r: float, a: float) -> float:
         """
             Описание:
             Возвращает угол между плечом и вертикальной осью привода (в радианах)
@@ -99,7 +83,22 @@ class Converting():
             
             a - плечо привода
         """
-        
+        Converting.checkEntriedData(r, a)
+
+        return np.arccos(r / (2 * a))
+    
+    @staticmethod
+    def checkEntriedData(r: float, a: float) -> None:
+        """
+            Проверяет введенные xm, ym, a на корректность. В случае некорректных
+            данных вызывается ConvertingException
+
+            Аргументы:
+            
+            a - длина плеча привода
+
+            r - координата r точки (xm, ym) в полярной системе координат
+        """
         errors: List[str] = []
         
         if (a <= 0.):
@@ -121,11 +120,9 @@ class Converting():
             
             raise ConvertingException(
                 msg,
-                "teta(r: float, a: float) -> float"
+                "checkEntriedData(r: float, a: float) -> float"
             )
-        else:
-            return np.arccos(r / (2 * a))
-    
+
     @staticmethod
     def psi(teta: float) -> float:
         """
@@ -182,7 +179,7 @@ class Converting():
         phi_r:        float
     ) -> Tuple[float, float]:
         """
-            Поворот системы координат на угол phi_r по часовой стрелке
+            Поворот системы координат на угол phi_r против часовой стрелки
             
             Отображение (x, y) -> (xr, yr)
         """
@@ -198,7 +195,7 @@ class Converting():
         phi_r:        float
     ) -> Tuple[float, float]:
         """
-            Поворот системы координат на угол phi_r против часовой стрелки
+            Поворот системы координат на угол phi_r по часовой стрелке
             
             Отображение (xr, yr) -> (x, y)
         """

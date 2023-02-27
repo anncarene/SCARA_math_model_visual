@@ -1,7 +1,7 @@
-from MainWindow import *
+from App        import *
 
 def main():
-    main_window = MainWindow()
-    main_window.mainloop()
+    app = App()
+    app.main_window.mainloop()
     
 main()

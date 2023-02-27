@@ -1,5 +1,5 @@
 from zope.interface         import Interface
-from typing                 import Tuple, Generator, List
+from typing                 import Tuple, List
 
 class IMathFuncsForVisualFactory(Interface):
     """Интерфейс, предоставляемый классом MathFuncsForVisual"""
@@ -9,33 +9,36 @@ class IMathFuncsForVisualFactory(Interface):
         x:      float, 
         a:      float, 
         typeNum:int
-    ) -> float:
-        """"""
+    ) -> float: pass
         
     def lin_func(
         coords: Tuple[float, float],
         t:      float
-    ) -> float:
-        """"""
+    ) -> float: pass
     
     def deltaxr(
         psi:    float, 
         a:      float, 
         typeNum:int
-    ) -> Tuple[float, float]:
-        """"""
+    ) -> Tuple[float, float]: pass
         
     def limits(
         psi:    float, 
         phi:    float, 
         a:      float, 
         typeNum:int
-    ) -> Tuple[float, float, float, float]:
-        """"""
+    ) -> Tuple[float, float, float, float]: pass
         
     def generate_spaces(
         a:      float,
         psi:    float,
         phi:    float
-    ) -> Tuple[List[List[float]], List[List[float]]]:
-        """"""
+    ) -> Tuple[List[float], List[float]]: pass
+    
+    def generate_animation_frames(
+        xm1:    float,
+        ym1:    float,
+        xm2:    float,
+        ym2:    float,
+        mode:   str
+    ) -> List[Tuple[float, float]]: pass

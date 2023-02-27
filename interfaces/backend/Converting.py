@@ -4,56 +4,48 @@ from typing                 import Tuple
 class IConvertingFactory(Interface):
     """Интерфейс, предоставляемый классом Converting"""
     
-    def degToRad(angleInDeg: float) -> float:
-        """"""
+    def degToRad(angleInDeg: float) -> float: pass
     
-    def radToDeg(angleInRad: float) -> float:
-        """"""
+    def radToDeg(angleInRad: float) -> float: pass
     
     def cartesianToPolar(
         x: float, 
         y: float
-    ) -> Tuple[float, float]:
-        """"""
+    ) -> Tuple[float, float]: pass
         
     def polarToCartesian(
         phi:    float, 
         r:      float
-    ) -> Tuple[float, float]:
-        """"""
+    ) -> Tuple[float, float]: pass
         
-    def teta(r, a) -> float:
-        """"""
+    def teta(r, a) -> float: pass
         
-    def psi(teta: float) -> float:
-        """"""
+    def checkEntriedData(r: float, a: float) -> None: pass
+
+    def psi(teta: float) -> float: pass
         
     def p_transfer(
         x:      float, 
         y:      float, 
         deltax: float, 
         deltay: float
-    ) -> Tuple[float, float]:
-        """"""
+    ) -> Tuple[float, float]: pass
         
     def r_p_transfer(
         x_n:    float, 
         y_n:    float, 
         deltax: float, 
         deltay: float
-    ) -> Tuple[float, float]:
-        """"""
+    ) -> Tuple[float, float]: pass
     
     def r_transfer(
         x:      float, 
         y:      float, 
-        phi_r:    float
-    ) -> Tuple[float, float]:
-        """"""
+        phi_r:  float
+    ) -> Tuple[float, float]: pass
         
     def r_r_transfer(
         xr:     float, 
         yr:     float, 
         phi_r:  float
-    ) -> Tuple[float, float]:
-        """"""
+    ) -> Tuple[float, float]: pass

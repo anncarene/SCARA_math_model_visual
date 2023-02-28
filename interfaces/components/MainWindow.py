@@ -32,18 +32,4 @@ class IMainWindow(Interface):
     canvas                      = Attribute("Объект Canvas с визуализацией. Либо просто пустой")
 
     """Методы"""
-    def drawCanvas() -> None: pass
-    
-    def __on_show_prev_path_btn_click() -> None: pass
-    def __on_a_entry_key_release(event: Event) -> None: pass
-    def __on_x_entry_key_release(event: Event) -> None: pass
-    def __on_y_entry_key_release(event: Event) -> None: pass
-    def __on_a_entry_focus_in(event: Event) -> None: pass
-    def __on_a_entry_focus_out(event: Event) -> None: pass
-    def __on_x_entry_focus_in(event: Event) -> None: pass
-    def __on_x_entry_focus_out(event: Event) -> None: pass
-    def __on_y_entry_focus_in(event: Event) -> None: pass
-    def __on_y_entry_focus_out(event: Event) -> None: pass
-    def __on_calc_btn_click() -> None: pass
-    def __on_anim_settings_btn_click() -> None: pass
-    
+    def draw_canvas() -> None: pass

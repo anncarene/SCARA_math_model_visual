@@ -29,7 +29,7 @@ class IMathFuncsForVisualFactory(Interface):
         typeNum:int
     ) -> Tuple[float, float, float, float]: pass
         
-    def generate_spaces(
+    def generate_spaces_x_y(
         a:      float,
         psi:    float,
         phi:    float

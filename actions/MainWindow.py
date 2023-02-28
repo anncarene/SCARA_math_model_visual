@@ -3,9 +3,16 @@ from zope.interface                 import implementer
 
 from interfaces.actions.MainWindow  import *
 
+from config                         import INTERFACE_EXCEPTIONS_MODE
+
+from backend.InterfaceVerificator   import *
 from backend.Exceptions             import *
 from backend.AdditionalFuncs        import *
 
+@InterfaceVerificator.except_if_not_implements(
+    INTERFACE_EXCEPTIONS_MODE,
+    IMainWindowActions
+)
 @implementer(IMainWindowActions)
 class MainWindowActions():
     

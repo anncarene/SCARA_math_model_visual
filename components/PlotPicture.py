@@ -7,9 +7,16 @@ from zope.interface                     import implementer
 
 from interfaces.components.PlotPicture  import *
 
+from config                             import INTERFACE_EXCEPTIONS_MODE
+
+from backend.InterfaceVerificator       import *
 from backend.MathFuncsForVisual         import *
 from backend.AdditionalFuncs            import *
 
+@InterfaceVerificator.except_if_not_implements(
+    INTERFACE_EXCEPTIONS_MODE,
+    IPlotPicture
+)
 @implementer(IPlotPicture)
 class PlotPicture():
     """

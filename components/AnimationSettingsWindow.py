@@ -6,6 +6,14 @@ from interfaces.components.AnimationSettingsWindow  import *
 
 from actions.AnimationSettingsWindow                import *
 
+from config                                         import INTERFACE_EXCEPTIONS_MODE
+
+from backend.InterfaceVerificator                   import *
+
+@InterfaceVerificator.except_if_not_implements(
+    INTERFACE_EXCEPTIONS_MODE,
+    IAnimationSettingsWindow
+)
 @implementer(IAnimationSettingsWindow)
 class AnimationSettingsWindow(Tk):
     """

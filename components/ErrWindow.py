@@ -4,6 +4,14 @@ from tkinter                            import ttk
 
 from interfaces.components.ErrWindow    import *
 
+from config                             import INTERFACE_EXCEPTIONS_MODE
+
+from backend.InterfaceVerificator       import *
+
+@InterfaceVerificator.except_if_not_implements(
+    INTERFACE_EXCEPTIONS_MODE,
+    IErrWindow
+)
 @implementer(IErrWindow)
 class ErrWindow(Toplevel):
     """ErrWindow - класс, реализующий диалоговое окно, появляющееся при ошибочно введенных данных"""

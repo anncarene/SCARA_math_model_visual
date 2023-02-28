@@ -1,13 +1,19 @@
 from abc                            import ABCMeta
 from typing                         import Tuple, List
 from zope.interface                 import provider
-
 import numpy                        as np
+
+from config                         import INTERFACE_EXCEPTIONS_MODE
 
 from interfaces.backend.Converting  import *
 
+from backend.InterfaceVerificator   import *
 from backend.Exceptions             import ConvertingException
 
+@InterfaceVerificator.except_if_not_provides(
+    INTERFACE_EXCEPTIONS_MODE, 
+    IConvertingFactory
+)
 @provider(IConvertingFactory)
 class Converting():
     """
@@ -197,7 +203,7 @@ class Converting():
         """
             Поворот системы координат на угол phi_r по часовой стрелке
             
-            Отображение (xr, yr) -> (x, y)
+            Отображение (xr, yr) -> (x, y) {0}
         """
         
         x = xr * np.cos(phi_r) - yr * np.sin(phi_r)

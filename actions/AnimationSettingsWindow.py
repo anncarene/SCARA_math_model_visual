@@ -3,10 +3,17 @@ from zope.interface                             import implementer
 
 from interfaces.actions.AnimationSettingsWindow import *
 
+from config                                     import INTERFACE_EXCEPTIONS_MODE
+
+from backend.InterfaceVerificator               import *
 from backend.Exceptions                         import *
 from backend.MathFuncsForVisual                 import *
 from backend.AdditionalFuncs                    import *
 
+@InterfaceVerificator.except_if_not_implements(
+    INTERFACE_EXCEPTIONS_MODE,
+    IAnimationSettingsWindowActions
+)
 @implementer(IAnimationSettingsWindowActions)
 class AnimationSettingsWindowActions():
     
@@ -70,14 +77,6 @@ class AnimationSettingsWindowActions():
     def ym2_entry_key_release(self, text: str) -> None:
         self.__set_anim_settings_window_entry_y2_text(text)
 
-    def __check_animation_frames(self, frames: List[Tuple[float, float]]) -> None:
-        for i in range(len(frames)):
-            try:
-                phi, r = Converting.cartesianToPolar(frames[i][0], frames[i][1])
-                Converting.checkEntriedData(r, self.get_app_state()["a"])
-            except:
-                raise AnimationCalcException("Недопустимое перемещение")
-
     def anim_start_btn_click(self, mode: str, entries: Dict[str, str]) -> None: 
         if mode is None:
             raise AnimationCalcException("Не установлен режим перемещения")
@@ -108,7 +107,10 @@ class AnimationSettingsWindowActions():
             mode = mode
         )
 
-        self.__check_animation_frames(frames)
+        AdditionalFuncs.check_animation_frames(
+            frames,
+            self.get_app_state()["a"]
+        )
 
         self.__set_entries_state("disabled")
         self.__set_radio_btns_state("disabled")

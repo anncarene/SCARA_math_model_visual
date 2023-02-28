@@ -26,8 +26,8 @@ class IPlotPicture(Interface):
     def set_plot_limits(a: float) -> None: pass
     def set_joints(x_space: List[float], y_space: List[float]) -> None: pass
     def calc_arms(x_space: List[float], y_space: List[float]) -> None: pass
-    def show_prev_path(self) -> None: pass
-    def hide_prev_path(self) -> None: pass
+    def show_prev_path() -> None: pass
+    def hide_prev_path() -> None: pass
     def calc_plot_figure_from_scratch(psi: float, phi: float, a: float) -> None: pass
     def update(frame: Tuple[float, float]) -> None: pass
     def animate(frames: List[Tuple[float, float]]) -> None: pass

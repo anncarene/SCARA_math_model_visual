@@ -13,9 +13,16 @@ from components.PlotPicture             import *
 from actions.MainWindow                 import *
 from actions.AnimationSettingsWindow    import *
 
+from config                             import INTERFACE_EXCEPTIONS_MODE
+
+from backend.InterfaceVerificator       import *
 from backend.Exceptions                 import *
 from backend.Converting                 import *
 
+@InterfaceVerificator.except_if_not_implements(
+    INTERFACE_EXCEPTIONS_MODE,
+    IApp
+)
 @implementer(IApp)
 class App():
     """Класс, экземпляр которого является корневым объектом приложения"""

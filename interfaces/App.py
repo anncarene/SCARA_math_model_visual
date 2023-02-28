@@ -18,7 +18,7 @@ class IApp(Interface):
     def set_entries_state(state: str) -> None: pass
     def set_start_btns_state(state: str) -> None: pass
     def set_anim_settings_btn_state(state: str) -> None: pass
-    def set_radio_btns_state(self, state: str) -> None: pass
+    def set_radio_btns_state(state: str) -> None: pass
     def get_app_state() -> Dict: pass
     def set_outputs(outputs: Dict[str, float]) -> None: pass
     def draw_plot_in_main_window() -> None: pass
@@ -32,7 +32,7 @@ class IApp(Interface):
     def anim_settings_window_init() -> None: pass
     def set_anim_settings_window_opened(opened: bool) -> None: pass
     def set_plot_figure_calced() -> None: pass
-    def set_prev_path_showed(self, showed: bool) -> None: pass
+    def set_prev_path_showed(showed: bool) -> None: pass
     def anim_settings_window_dismiss() -> None: pass
     def main_window_destroy() -> None: pass
     def set_anim_settings_window_entry_x1_text(text: str) -> None: pass

@@ -1,8 +1,16 @@
-from typing             import List
-from zope.interface     import implementer
+from typing                         import List
+from zope.interface                 import implementer
 
-from interfaces.State   import *
+from interfaces.State               import *
 
+from config                         import INTERFACE_EXCEPTIONS_MODE
+
+from backend.InterfaceVerificator   import *
+
+@InterfaceVerificator.except_if_not_implements(
+    INTERFACE_EXCEPTIONS_MODE,
+    IState
+)
 @implementer(IState)
 class State():
     """Класс, экземпляр которого хранит глобальные переменные состояния приложения."""

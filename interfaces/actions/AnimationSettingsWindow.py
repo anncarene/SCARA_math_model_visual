@@ -31,9 +31,8 @@ class IAnimationSettingsWindowActions(Interface):
     def ym1_entry_key_release(text: str) -> None: pass
     def xm2_entry_key_release(text: str) -> None: pass
     def ym2_entry_key_release(text: str) -> None: pass
-    def __check_animation_frames(frames: List[Tuple[float, float]]) -> None: pass
     def anim_start_btn_click(mode: str, entries: Dict[str, str]) -> None: pass    
     def anim_start_btn_click(mode: str, entries: Dict[str, str]) -> None: pass
     def destroy() -> None: pass
     def set_values_after_animaion(xm2: float, ym2: float) -> None: pass
-    def unblock_widgets(self) -> None: pass
+    def unblock_widgets() -> None: pass

@@ -10,7 +10,6 @@ class NotNumberEntryException(Exception):
     def __str__(self):
         return self.message
 
-
 class ConvertingException(Exception):
     """Класс исключений для конвертации"""
     

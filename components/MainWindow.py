@@ -8,12 +8,19 @@ from interfaces.components.MainWindow   import *
 
 from actions.MainWindow                 import *
 
+from config                             import INTERFACE_EXCEPTIONS_MODE
+
+from backend.InterfaceVerificator       import *
 from backend.MathFuncsForVisual         import *
 from backend.Converting                 import *
 from backend.AdditionalFuncs            import *
 
 from components.PlotPicture             import *
 
+@InterfaceVerificator.except_if_not_implements(
+    INTERFACE_EXCEPTIONS_MODE,
+    IMainWindow
+)
 @implementer(IMainWindow)            
 class MainWindow(Tk):   
     """

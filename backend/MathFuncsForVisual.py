@@ -6,8 +6,15 @@ import numpy                                as np
 
 from interfaces.backend.MathFuncsForVisual  import *
 
+from config                                 import INTERFACE_EXCEPTIONS_MODE
+
+from backend.InterfaceVerificator           import *
 from backend.Converting                     import *
 
+@InterfaceVerificator.except_if_not_provides(
+    INTERFACE_EXCEPTIONS_MODE,
+    IMathFuncsForVisualFactory
+)
 @provider(IMathFuncsForVisualFactory)
 class MathFuncsForVisual():
     """MathFuncsForVisual - абстрактный класс с расчетами функций и интервалов для визуала"""

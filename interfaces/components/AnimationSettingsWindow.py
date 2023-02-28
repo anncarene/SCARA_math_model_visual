@@ -25,21 +25,3 @@ class IAnimationSettingsWindow(Interface):
     anim_start_btn          = Attribute("Кнопка старта анимации")
 
     mode                    = Attribute("Режим перемещения")
-
-    """Методы"""
-    def __set_linear_mode() -> None: pass
-    def __set_radial_mode() -> None: pass
-    def __set_integral_mode() -> None: pass
-    def __on_anim_start_btn_click() -> None: pass
-    def __on_xm1_entry_key_release(event: Event) -> None: pass
-    def __on_ym1_entry_key_release(event: Event) -> None: pass
-    def __on_xm2_entry_key_release(event: Event) -> None: pass
-    def __on_ym2_entry_key_release(event: Event) -> None: pass
-    def __on_xm1_entry_focus_in(event: Event) -> None: pass
-    def __on_ym1_entry_focus_in(event: Event) -> None: pass
-    def __on_xm2_entry_focus_in(event: Event) -> None: pass
-    def __on_ym2_entry_focus_in(event: Event) -> None: pass
-    def __on_xm1_entry_focus_out(event: Event) -> None: pass
-    def __on_ym1_entry_focus_out(event: Event) -> None: pass
-    def __on_xm2_entry_focus_out(event: Event) -> None: pass
-    def __on_ym2_entry_focus_out(event: Event) -> None: pass

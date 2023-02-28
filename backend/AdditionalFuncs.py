@@ -5,10 +5,17 @@ from typing                             import Dict
 
 from interfaces.backend.AdditionalFuncs import *
 
-from backend.Converting                 import *
-from backend.Exceptions                 import NotNumberEntryException
+from config                             import INTERFACE_EXCEPTIONS_MODE
 
-@provider(AdditionalFuncsFactory)
+from backend.Converting                 import *
+from backend.Exceptions                 import NotNumberEntryException, AnimationCalcException
+from backend.InterfaceVerificator       import *
+
+@InterfaceVerificator.except_if_not_provides(
+    INTERFACE_EXCEPTIONS_MODE, 
+    IAdditionalFuncsFactory
+)
+@provider(IAdditionalFuncsFactory)
 class AdditionalFuncs():
     """
         AdditionalFuncsForWindows - абстрактный класс, содержащий в себе
@@ -59,3 +66,11 @@ class AdditionalFuncs():
         for key in entries:
                 if AdditionalFuncs.is_entry_valid(entries[key]) is not True:
                     raise NotNumberEntryException("В одном или нескольких полях введены не числа")
+    @staticmethod            
+    def check_animation_frames(frames: List[Tuple[float, float]], a: float) -> None:
+        for i in range(len(frames)):
+            try:
+                phi, r = Converting.cartesianToPolar(frames[i][0], frames[i][1])
+                Converting.checkEntriedData(r, a)
+            except:
+                raise AnimationCalcException("Недопустимое перемещение")

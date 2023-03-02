@@ -1,6 +1,6 @@
 ## Визуализация мат. модели расчета положений для SCARA 
 
-ver 2.0
+ver 2.1
 
 ### Установка зависимостей
 
@@ -25,7 +25,6 @@ $ python3 main.py
 Если Ваш python не поддерживает tkinter, произведите следующие действия:
 
 Arch-based distros
-
 ```
 $ sudo pacman -S tk
 ```
@@ -37,7 +36,7 @@ $ sudo apt-get install -y python3-tk
 
 RHEL-based distros
 ```
-$ sudo dnf install -y python3.10-tkinter.x86-64
+$ sudo dnf install -y python3.10-tkinter
 ```
 
 ## Changelog
@@ -49,5 +48,7 @@ $ sudo dnf install -y python3.10-tkinter.x86-64
 - Глобальное изменение архитектуры приложения
 ### 2.0.1
 - Незначительные архитектурные изменения
-- Добавление класс InterfaceVerificator
+- Добавление класса InterfaceVerificator
 - Исправление ошибок при работе с интерфейсами
+### 2.1
+- Добавление возможности анимирования перемещения по множеству точек

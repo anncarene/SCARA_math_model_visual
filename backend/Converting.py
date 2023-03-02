@@ -193,7 +193,7 @@ class Converting():
         xr = x * np.cos(phi_r) + y * np.sin(phi_r)
         yr = y * np.cos(phi_r) - x * np.sin(phi_r)
         return xr, yr
-    
+
     @staticmethod
     def r_r_transfer(
         xr:         float,
@@ -205,7 +205,8 @@ class Converting():
             
             Отображение (xr, yr) -> (x, y) {0}
         """
-        
+
         x = xr * np.cos(phi_r) - yr * np.sin(phi_r)
         y = xr * np.sin(phi_r) + yr * np.cos(phi_r)
         return x, y
+    

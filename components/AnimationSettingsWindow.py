@@ -1,7 +1,8 @@
 from tkinter                                        import *
 from tkinter                                        import ttk
 from tkinter                                        import Event
-from zope.interface                                 import implementer
+from zope.interface                                 import implementer, provider
+
 from interfaces.components.AnimationSettingsWindow  import *
 
 from actions.AnimationSettingsWindow                import *
@@ -10,10 +11,15 @@ from config                                         import INTERFACE_EXCEPTIONS_
 
 from backend.InterfaceVerificator                   import *
 
+@InterfaceVerificator.except_if_not_provides(
+    INTERFACE_EXCEPTIONS_MODE,
+    IAnimationSettingsWindowFactory
+)
 @InterfaceVerificator.except_if_not_implements(
     INTERFACE_EXCEPTIONS_MODE,
     IAnimationSettingsWindow
 )
+@provider(IAnimationSettingsWindowFactory)
 @implementer(IAnimationSettingsWindow)
 class AnimationSettingsWindow(Tk):
     """
@@ -34,7 +40,7 @@ class AnimationSettingsWindow(Tk):
 
         #конфигурация сетки
         for i in range(2): self.columnconfigure(index=i, weight=1)
-        for i in range(9): self.rowconfigure(index=i, weight=1)
+        for i in range(10): self.rowconfigure(index=i, weight=1)
         
         #обработчик событий
         self.actions            = actions
@@ -74,6 +80,11 @@ class AnimationSettingsWindow(Tk):
             text = "Начать анимацию", 
             command = self.__on_anim_start_btn_click
         )
+        self.show_mp_settings_btn = ttk.Button(
+            self,
+            text = "Расширенные настройки анимации",
+            command = actions.show_mp_settings_btn_click
+        )
 
         #начальное состояние элементов
         self.xm1_entry["state"] = [actions.get_app_state()["anim_settings_window_entries_state"]]
@@ -86,6 +97,9 @@ class AnimationSettingsWindow(Tk):
         self.integral_mode_btn["state"]  = [actions.get_app_state()["anim_settings_window_radio_btns_state"]]
 
         self.anim_start_btn["state"] = [actions.get_app_state()["anim_settings_window_start_btn_state"]]
+
+        if actions.get_app_state()["mp_anim_settings_window_opened"]:
+            self.show_mp_settings_btn["state"] = "disabled"
 
         self.xm1_entry.insert(0, actions.get_app_state()["xm1_entry_text"])
         self.ym1_entry.insert(0, actions.get_app_state()["ym1_entry_text"])
@@ -125,10 +139,11 @@ class AnimationSettingsWindow(Tk):
             self.radial_mode_btn,
             self.linear_mode_btn,
             self.integral_mode_btn,
-            self.anim_start_btn
+            self.anim_start_btn,
+            self.show_mp_settings_btn
         ]
 
-        for i in range(4, 9): elements_list[i - 4].grid(
+        for i in range(4, 10): elements_list[i - 4].grid(
             row=i,
             column=0,
             rowspan=1,
@@ -159,13 +174,13 @@ class AnimationSettingsWindow(Tk):
                 }
             )
             self.after(
-                6050, 
+                5050, 
                 lambda: self.actions.set_values_after_animaion(
                     float(self.xm2_entry.get()), 
                     float(self.ym2_entry.get())
                 )
             )
-            self.after(6000, self.actions.unblock_widgets)
+            self.after(5000, self.actions.unblock_widgets)
         
         except (
             NotNumberEntryException,

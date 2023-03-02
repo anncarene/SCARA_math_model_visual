@@ -1,5 +1,16 @@
-from typing         import List, Tuple
+from typing         import List, Tuple, Callable, Dict
 from zope.interface import Interface, Attribute
+
+class IPlotPictureFactory(Interface):
+    """Интерфейс, предоставляемый классом PlotPicture"""
+
+    def __call__(
+        get_app_state:          Callable[[], Dict],
+        set_plot_figure_calced: Callable[[], None],
+        set_prev_path_showed:   Callable[[bool], None],
+        set_prev_path_coords:   Callable[[List[Tuple[float, float]]], None]
+    ):
+        pass
 
 class IPlotPicture(Interface):
     """Интерфейс, реализуемый классом PlotPicture"""

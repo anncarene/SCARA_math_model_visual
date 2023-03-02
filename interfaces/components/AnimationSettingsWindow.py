@@ -1,5 +1,11 @@
-from tkinter        import Event
-from zope.interface import Interface, Attribute
+from zope.interface                     import Interface, Attribute
+
+from actions.AnimationSettingsWindow    import *
+
+class IAnimationSettingsWindowFactory(Interface):
+    """Интерфейс, предоставляемый классом AnimationSettingsWindow"""
+
+    def __call__(actions: AnimationSettingsWindowActions): pass
 
 class IAnimationSettingsWindow(Interface):
     """Интерфейс, реализуемый классом AnimationSettingsWindow"""
@@ -23,5 +29,6 @@ class IAnimationSettingsWindow(Interface):
     integral_mode_btn       = Attribute("Переключатель на интегральный режим пермещения")
 
     anim_start_btn          = Attribute("Кнопка старта анимации")
+    show_mp_settings_btn    = Attribute("Кнопка, открывающая окно с расширенными настройками анимации")
 
     mode                    = Attribute("Режим перемещения")

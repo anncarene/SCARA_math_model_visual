@@ -2,7 +2,7 @@ from tkinter                            import *
 from tkinter                            import ttk
 from tkinter                            import Event
 from matplotlib.backends.backend_tkagg  import FigureCanvasTkAgg
-from zope.interface                     import implementer
+from zope.interface                     import implementer, provider
 
 from interfaces.components.MainWindow   import *
 
@@ -17,10 +17,15 @@ from backend.AdditionalFuncs            import *
 
 from components.PlotPicture             import *
 
+@InterfaceVerificator.except_if_not_provides(
+    INTERFACE_EXCEPTIONS_MODE,
+    IMainWindowFactory
+)
 @InterfaceVerificator.except_if_not_implements(
     INTERFACE_EXCEPTIONS_MODE,
     IMainWindow
 )
+@provider(IMainWindowFactory)
 @implementer(IMainWindow)            
 class MainWindow(Tk):   
     """

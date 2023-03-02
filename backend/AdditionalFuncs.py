@@ -18,7 +18,7 @@ from backend.InterfaceVerificator       import *
 @provider(IAdditionalFuncsFactory)
 class AdditionalFuncs():
     """
-        AdditionalFuncsForWindows - абстрактный класс, содержащий в себе
+        AdditionalFuncs - абстрактный класс, содержащий в себе
         дополнительные функции, используемые окнами
     """
 

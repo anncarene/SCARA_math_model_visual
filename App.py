@@ -1,23 +1,25 @@
-from zope.interface                     import implementer
-from typing                             import List, Tuple, Dict
+from zope.interface                         import implementer
+from typing                                 import List, Tuple, Dict
 
-from State                              import *
+from State                                  import *
 
-from interfaces.App                     import *
+from interfaces.App                         import *
 
-from components.MainWindow              import *
-from components.AnimationSettingsWindow import *
-from components.ErrWindow               import *
-from components.PlotPicture             import *
+from components.MainWindow                  import *
+from components.AnimationSettingsWindow     import *
+from components.MP_AnimationSttingsWindow   import *
+from components.ErrWindow                   import *
+from components.PlotPicture                 import *
 
-from actions.MainWindow                 import *
-from actions.AnimationSettingsWindow    import *
+from actions.MainWindow                     import *
+from actions.MP_AnimationSettingsWindow     import *
+from actions.AnimationSettingsWindow        import *
 
-from config                             import INTERFACE_EXCEPTIONS_MODE
+from config                                 import INTERFACE_EXCEPTIONS_MODE
 
-from backend.InterfaceVerificator       import *
-from backend.Exceptions                 import *
-from backend.Converting                 import *
+from backend.InterfaceVerificator           import *
+from backend.Exceptions                     import *
+from backend.Converting                     import *
 
 @InterfaceVerificator.except_if_not_implements(
     INTERFACE_EXCEPTIONS_MODE,
@@ -51,6 +53,7 @@ class App():
                 set_anim_settings_window_M1_entries_text    = self.set_anim_settings_window_M1_entries_text,
                 anim_settings_window_init                   = self.anim_settings_window_init,
                 anim_settings_window_dismiss                = self.anim_settings_window_dismiss,
+                mp_anim_settings_window_dismiss             = self.mp_anim_settings_window_dismiss,
                 set_a_value                                 = self.set_a_value,
                 set_xy_values                               = self.set_xy_values,
                 err_window_init                             = self.err_window_init,
@@ -59,14 +62,17 @@ class App():
                 main_window_destroy                         = self.main_window_destroy,
                 show_prev_path                              = self.show_prev_path,
                 hide_prev_path                              = self.hide_prev_path,       
-                set_prev_path_showed                        = self.set_prev_path_showed
+                set_prev_path_showed                        = self.set_prev_path_showed,
+                set_mp_x_list_entry_text                    = self.set_mp_x_list_entry_text,
+                set_mp_y_list_entry_text                    = self.set_mp_y_list_entry_text
             ),
             plot_picture = self.plot_picture
         )
 
-        self.anim_settings_window: None | AnimationSettingsWindow = None
+        self.anim_settings_window: AnimationSettingsWindow = None
+        self.mp_anim_settings_window: MP_AnimationSettingsWindow = None
         self.err_window: ErrWindow = None
-    
+
     def set_entries_state(self, state: str) -> None:
         """Устанавливает state-параметр полей для ввода"""
 
@@ -94,15 +100,36 @@ class App():
         """Устанавливает state-параметр кнопки настроек анимации"""
         
         self.main_window.anim_settings_btn["state"]             = [state]
+    
+    def set_show_mp_settings_btn_state(self, state: str) -> None:
+        """Устанавливает state-параметр кнопки расширенных настроек анимации"""
+        
+        if self.__state.anim_settings_window_opened:
+            self.anim_settings_window.show_mp_settings_btn["state"] = [state]
 
     def set_radio_btns_state(self, state: str) -> None:
-        """Устанавливаеет state-параметр радио-кнопок в окне настроек анимации"""
+        """Устанавливает state-параметр радио-кнопок в окне настроек анимации"""
 
         if self.__state.anim_settings_window_opened:
             self.anim_settings_window.radial_mode_btn["state"]      = [state]
             self.anim_settings_window.linear_mode_btn["state"]      = [state]
             self.anim_settings_window.integral_mode_btn["state"]    = [state]
+        
         self.__state.anim_settings_window_radio_btns_state          = state
+
+    def set_mp_widgets_state(self, state: str) -> None:
+        """Устанавливает state-параметр виджетов окна с расширенными настройками анимации"""
+
+        if self.__state.mp_anim_settings_window_opened:
+            self.mp_anim_settings_window.x_list_entry["state"]              = [state]
+            self.mp_anim_settings_window.y_list_entry["state"]              = [state]
+            self.mp_anim_settings_window.moving_mode_list_entry["state"]    = [state]
+            self.mp_anim_settings_window.clear_btn["state"]                 = [state]
+            self.mp_anim_settings_window.start_btn["state"]                 = [state]
+        
+        self.__state.mp_entries_state   = state
+        self.__state.mp_btns_state      = state
+
 
     def get_app_state(self) -> Dict:
         """Геттер для переменных состояния приложения"""
@@ -122,15 +149,24 @@ class App():
             "anim_settings_window_entries_state": self.__state.anim_settings_window_entries_state,
             "anim_settings_window_radio_btns_state": self.__state.anim_settings_window_radio_btns_state,
             "anim_settings_window_start_btn_state": self.__state.anim_settings_window_start_btn_state,
-            "xm1_entry_text": self.__state.xm1_entry_text,
-            "ym1_entry_text": self.__state.ym1_entry_text,
-            "xm2_entry_text": self.__state.xm2_entry_text,
-            "ym2_entry_text": self.__state.ym2_entry_text,
-            "plot_figure_calced": self.__state.plot_figure_calced,
-            "moving_mode": self.__state.moving_mode,
-            "prev_path_showed": self.__state.prev_path_showed,
-            "prev_path_x_coords": self.__state.prev_path_x_coords,
-            "prev_path_y_coords": self.__state.prev_path_y_coords
+            "xm1_entry_text":       self.__state.xm1_entry_text,
+            "ym1_entry_text":       self.__state.ym1_entry_text,
+            "xm2_entry_text":       self.__state.xm2_entry_text,
+            "ym2_entry_text":       self.__state.ym2_entry_text,
+            "plot_figure_calced":   self.__state.plot_figure_calced,
+            "moving_mode":          self.__state.moving_mode,
+            "prev_path_showed":     self.__state.prev_path_showed,
+            "prev_path_x_coords":   self.__state.prev_path_x_coords,
+            "prev_path_y_coords":   self.__state.prev_path_y_coords,
+            "mp_anim_settings_window_opened": self.__state.mp_anim_settings_window_opened,
+            "mp_x_list":            self.__state.mp_x_list,
+            "mp_y_list":            self.__state.mp_y_list,
+            "mp_moving_mode_list":  self.__state.mp_moving_mode_list,
+            "mp_x_list_entry_text": self.__state.mp_x_list_entry_text,
+            "mp_y_list_entry_text": self.__state.mp_y_list_entry_text,
+            "mp_moving_mode_list_entry_text": self.__state.mp_moving_mode_list_entry_text,
+            "mp_entries_state":     self.__state.mp_entries_state,
+            "mp_btns_state":        self.__state.mp_btns_state
         }
 
     def set_outputs(self, outputs: Dict[str, float]) -> None:
@@ -226,9 +262,48 @@ class App():
                 set_show_prev_path_btn_state    = self.set_show_prev_path_btn_state,
                 set_anim_settings_window_M1_entries_text    = self.set_anim_settings_window_M1_entries_text,
                 set_anim_settings_window_entry_x2_text      = self.set_anim_settings_window_entry_x2_text,
-                set_anim_settings_window_entry_y2_text      = self.set_anim_settings_window_entry_y2_text
+                set_anim_settings_window_entry_y2_text      = self.set_anim_settings_window_entry_y2_text,
+                set_mp_x_list_entry_text        = self.set_mp_x_list_entry_text,
+                set_mp_y_list_entry_text        = self.set_mp_y_list_entry_text,
+                set_mp_widgets_state            = self.set_mp_widgets_state,
+                mp_anim_settings_window_init    = self.mp_anim_settings_window_init
             )
         )
+
+    def mp_anim_settings_window_init(self) -> None:
+        """Инициализация окна с расширенными настройками анимации"""
+
+        self.set_mp_anim_settings_window_opened(True)
+        self.set_show_mp_settings_btn_state("disabled")
+        self.mp_anim_settings_window = MP_AnimationSettingsWindow(
+            #инициализация обработчика событий
+            actions = MP_AnimationSettingsWindowActions(
+                set_entries_state               = self.set_entries_state,
+                set_start_btns_state            = self.set_start_btns_state,
+                set_radio_btns_state            = self.set_radio_btns_state,
+                get_app_state                   = self.get_app_state,
+                set_main_window_x_entry_text    = self.set_main_window_x_entry_text,
+                set_main_window_y_entry_text    = self.set_main_window_y_entry_text,
+                start_animation                 = self.start_animation,
+                err_window_init                 = self.err_window_init,
+                set_a_value                     = self.set_a_value,
+                set_outputs                     = self.set_outputs,
+                set_xy_values                   = self.set_xy_values,
+                set_x2y2_values                 = self.set_x2y2_values,
+                set_prev_path_coords            = self.set_prev_path_coords,
+                set_show_prev_path_btn_state    = self.set_show_prev_path_btn_state,
+                set_anim_settings_window_M1_entries_text    = self.set_anim_settings_window_M1_entries_text,
+                mp_anim_settings_window_dismiss     = self.mp_anim_settings_window_dismiss,
+                set_mp_x_list                       = self.set_mp_x_list,
+                set_mp_y_list                       = self.set_mp_y_list,
+                set_mp_moving_mode_list             = self.set_mp_moving_mode_list,
+                set_mp_x_list_entry_text            = self.set_mp_x_list_entry_text,
+                set_mp_y_list_entry_text            = self.set_mp_y_list_entry_text,
+                set_mp_moving_mode_list_entry_text  = self.set_mp_moving_mode_list_entry_text,
+                set_mp_widgets_state                = self.set_mp_widgets_state
+            )
+        )
+
 
     def set_anim_settings_window_opened(self, opened: bool) -> None:
         """
@@ -238,6 +313,15 @@ class App():
         """
 
         self.__state.anim_settings_window_opened = opened
+    
+    def set_mp_anim_settings_window_opened(self, opened: bool) -> None:
+        """
+            Задает переменную глобального состояния приложения,
+            обозначающую, открыто ли окно расширенных настроек анимации, на
+            bool-значение opened
+        """
+
+        self.__state.mp_anim_settings_window_opened = opened
 
     def set_plot_figure_calced(self) -> None:
         """
@@ -245,6 +329,7 @@ class App():
             состояния приложения, обозначающей, был ли график рассчитан
             хотя бы 1 раз 
         """
+        
         self.__state.plot_figure_calced = True
 
     def set_prev_path_showed(self, showed: bool) -> None:
@@ -257,16 +342,23 @@ class App():
         self.__state.prev_path_showed = showed
         if showed is True:
             self.set_start_btns_state("disabled")
+            self.set_mp_widgets_state("disabled")
             self.main_window.show_prev_path_btn["text"] = "Скрыть предыдущий маршрут"
         else:
             self.set_start_btns_state("normal")
+            self.set_mp_widgets_state("normal")
             self.main_window.show_prev_path_btn["text"] = "Показать предыдущий маршрут"
 
     def anim_settings_window_dismiss(self) -> None:
         self.set_anim_settings_window_opened(False)
         self.set_anim_settings_btn_state("normal")
         self.anim_settings_window.destroy()
-        
+
+    def mp_anim_settings_window_dismiss(self) -> None:
+        self.set_mp_anim_settings_window_opened(False)
+        self.set_show_mp_settings_btn_state("normal")
+        self.mp_anim_settings_window.destroy()
+
     def main_window_destroy(self) -> None:
         self.main_window.destroy()
     
@@ -335,7 +427,28 @@ class App():
 
         self.set_anim_settings_window_entry_x1_text(x_entry_text)
         self.set_anim_settings_window_entry_y1_text(y_entry_text)
-        
+
+    def set_mp_x_list_entry_text(self, text: str) -> None:
+        self.__state.mp_x_list_entry_text = text
+
+        if self.__state.mp_anim_settings_window_opened:
+            self.mp_anim_settings_window.x_list_entry.delete(0, END)
+            self.mp_anim_settings_window.x_list_entry.insert(0, text)
+
+    def set_mp_y_list_entry_text(self, text: str) -> None:
+        self.__state.mp_y_list_entry_text = text
+
+        if self.__state.mp_anim_settings_window_opened:
+            self.mp_anim_settings_window.y_list_entry.delete(0, END)
+            self.mp_anim_settings_window.y_list_entry.insert(0, text)
+
+    def set_mp_moving_mode_list_entry_text(self, text: str) -> None:
+        self.__state.mp_moving_mode_list_entry_text = text
+
+        if self.__state.mp_anim_settings_window_opened:
+            self.mp_anim_settings_window.moving_mode_list_entry.delete(0, END)
+            self.mp_anim_settings_window.moving_mode_list_entry.insert(0, text)    
+
     def set_a_value(self, a: float) -> None:
         """Задает state-переменную a"""
 
@@ -352,6 +465,15 @@ class App():
 
         self.__state.xm2 = x
         self.__state.ym2 = y
+    
+    def set_mp_x_list(self, x_list: List[float]) -> None:
+        self.__state.mp_x_list = x_list
+    
+    def set_mp_y_list(self, y_list: List[float]) -> None:
+        self.__state.mp_y_list = y_list
+    
+    def set_mp_moving_mode_list(self, moving_mode_list: List[int]) -> None:
+        self.__state.mp_moving_mode_list = moving_mode_list
 
     def start_animation(self, frames: List[Tuple[float, float]]) -> None:
         """

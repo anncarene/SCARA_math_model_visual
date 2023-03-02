@@ -1,5 +1,5 @@
 from typing                                     import Callable, Dict, List, Tuple
-from zope.interface                             import implementer
+from zope.interface                             import implementer, provider
 
 from interfaces.actions.AnimationSettingsWindow import *
 
@@ -10,10 +10,15 @@ from backend.Exceptions                         import *
 from backend.MathFuncsForVisual                 import *
 from backend.AdditionalFuncs                    import *
 
+@InterfaceVerificator.except_if_not_provides(
+    INTERFACE_EXCEPTIONS_MODE,
+    IAnimationSettingsWindowActionsFactory
+)
 @InterfaceVerificator.except_if_not_implements(
     INTERFACE_EXCEPTIONS_MODE,
     IAnimationSettingsWindowActions
 )
+@provider(IAnimationSettingsWindowActionsFactory)
 @implementer(IAnimationSettingsWindowActions)
 class AnimationSettingsWindowActions():
     
@@ -42,28 +47,48 @@ class AnimationSettingsWindowActions():
         set_anim_settings_window_entry_x2_text:     Callable[[str], None],
         set_anim_settings_window_entry_y2_text:     Callable[[str], None],
         set_prev_path_coords:                       Callable[[List[Tuple[float, float]]], None],
-        set_show_prev_path_btn_state:               Callable[[str], None]
+        set_show_prev_path_btn_state:               Callable[[str], None],
+        set_mp_x_list_entry_text:                   Callable[[str], None],
+        set_mp_y_list_entry_text:                   Callable[[str], None],
+        set_mp_widgets_state:                       Callable[[str], None],
+        mp_anim_settings_window_init:               Callable[[], None]
     ):
         self.__set_show_prev_path_btn_state             = set_show_prev_path_btn_state
         self.__set_entries_state                        = set_entries_state
         self.__set_start_btns_state                     = set_start_btns_state
         self.__set_radio_btns_state                     = set_radio_btns_state
+        
         self.__set_main_window_x_entry_text             = set_main_window_x_entry_text
         self.__set_main_window_y_entry_text             = set_main_window_y_entry_text
+        
         self.__start_animation                          = start_animation
+        
         self.__anim_settings_window_dismiss             = anim_settings_window_dismiss
+        
         self.__set_a_value                              = set_a_value
         self.__set_outputs                              = set_outputs
         self.__set_xy_values                            = set_xy_values
         self.__set_x2y2_values                          = set_x2y2_values
+        
         self.__set_anim_settings_window_M1_entries_text = set_anim_settings_window_M1_entries_text
         self.__set_anim_settings_window_entry_x2_text   = set_anim_settings_window_entry_x2_text
         self.__set_anim_settings_window_entry_y2_text   = set_anim_settings_window_entry_y2_text
+        
         self.__set_prev_path_coords                     = set_prev_path_coords
+        
+        self.__set_mp_x_list_entry_text                 = set_mp_x_list_entry_text
+        self.__set_mp_y_list_entry_text                 = set_mp_y_list_entry_text
+        
+        self.__set_mp_widgets_state                     = set_mp_widgets_state
+
+        self.__mp_anim_settings_window_init             = mp_anim_settings_window_init
 
         self.set_moving_mode                            = set_moving_mode
         self.err_window_init                            = err_window_init
         self.get_app_state                              = get_app_state
+
+    def show_mp_settings_btn_click(self) -> None:
+        self.__mp_anim_settings_window_init()
 
     def xm1_entry_key_release(self, text: str) -> None: 
         self.__set_main_window_x_entry_text(text)
@@ -86,6 +111,11 @@ class AnimationSettingsWindowActions():
 
         AdditionalFuncs.primal_entries_validation(entries)
 
+        if AdditionalFuncs.is_entry_valid(
+            self.get_app_state()["a_entry_text"]
+        ) is not True:
+            raise NotNumberEntryException("В поле ввода длины плеча введено не число")
+        
         self.__set_a_value(float(self.get_app_state()["a_entry_text"]))
 
         xm1 = float(entries["xm1"])
@@ -95,9 +125,6 @@ class AnimationSettingsWindowActions():
      
         if self.get_app_state()["plot_figure_calced"] is not True:
             raise AnimationCalcException("Сначала нужно рассчитать график")
-
-        self.__set_xy_values(x = xm1, y = ym1)
-        self.__set_x2y2_values(x = xm2, y = ym2)
 
         frames = MathFuncsForVisual.generate_animation_frames(
             xm1 = xm1,
@@ -112,10 +139,14 @@ class AnimationSettingsWindowActions():
             self.get_app_state()["a"]
         )
 
+        self.__set_xy_values(x = xm1, y = ym1)
+        self.__set_x2y2_values(x = xm2, y = ym2)
+
         self.__set_entries_state("disabled")
         self.__set_radio_btns_state("disabled")
         self.__set_start_btns_state("disabled")
         self.__set_show_prev_path_btn_state("disabled")
+        self.__set_mp_widgets_state("disabled")
 
         self.__set_prev_path_coords(frames)
         self.__start_animation(frames)
@@ -133,6 +164,8 @@ class AnimationSettingsWindowActions():
             self.__set_anim_settings_window_M1_entries_text(str(xm2), str(ym2))
             self.__set_main_window_x_entry_text(str(xm2))
             self.__set_main_window_y_entry_text(str(ym2))
+            self.__set_mp_x_list_entry_text(str(xm2))
+            self.__set_mp_y_list_entry_text(str(ym2))
             self.__set_outputs(outputs)
     
     def unblock_widgets(self) -> None:    
@@ -140,3 +173,4 @@ class AnimationSettingsWindowActions():
         self.__set_radio_btns_state("normal")
         self.__set_start_btns_state("normal")
         self.__set_show_prev_path_btn_state("normal")
+        self.__set_mp_widgets_state("normal")

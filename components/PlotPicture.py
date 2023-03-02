@@ -3,7 +3,7 @@ from matplotlib.figure                  import Figure
 from matplotlib.axes                    import Axes
 from matplotlib.lines                   import Line2D
 from matplotlib.animation               import FuncAnimation
-from zope.interface                     import implementer
+from zope.interface                     import implementer, provider
 
 from interfaces.components.PlotPicture  import *
 
@@ -13,10 +13,15 @@ from backend.InterfaceVerificator       import *
 from backend.MathFuncsForVisual         import *
 from backend.AdditionalFuncs            import *
 
+@InterfaceVerificator.except_if_not_provides(
+    INTERFACE_EXCEPTIONS_MODE,
+    IPlotPictureFactory
+)
 @InterfaceVerificator.except_if_not_implements(
     INTERFACE_EXCEPTIONS_MODE,
     IPlotPicture
 )
+@provider(IPlotPictureFactory)
 @implementer(IPlotPicture)
 class PlotPicture():
     """
@@ -26,11 +31,10 @@ class PlotPicture():
 
     def __init__(
         self, 
-        get_app_state:  Callable[[], Dict],
+        get_app_state:          Callable[[], Dict],
         set_plot_figure_calced: Callable[[], None],
-        set_prev_path_showed: Callable[[bool], None],
-        set_prev_path_coords: Callable[[List[Tuple[float, float]]], None]
-    
+        set_prev_path_showed:   Callable[[bool], None],
+        set_prev_path_coords:   Callable[[List[Tuple[float, float]]], None]
     ):
 
         self.__get_app_state            = get_app_state
@@ -89,23 +93,35 @@ class PlotPicture():
         )
             
     def show_prev_path(self) -> None:
-        """Показывает последнюю траекторию, по которой перемщался привод"""
+        """Показывает последнюю траекторию, по которой перемещался привод"""
+        
         self.prev_path, = self.subplt.plot(
             self.__get_app_state()["prev_path_x_coords"],
             self.__get_app_state()["prev_path_y_coords"],
             linewidth=1.5,
             color="#FF0033"
         )
-        self.prev_path_limit_dots, = self.subplt.plot(
-            [
+
+        mp_x_list_len = len(self.__get_app_state()["mp_x_list"])
+        x_space = []
+        y_space = []
+
+        if mp_x_list_len == 0:
+            x_space = [
                 self.__get_app_state()["prev_path_x_coords"][0],
                 self.__get_app_state()["prev_path_x_coords"][-1]
-            ],
-
-            [
+            ]
+            y_space = [
                 self.__get_app_state()["prev_path_y_coords"][0],
                 self.__get_app_state()["prev_path_y_coords"][-1]
-            ],
+            ]
+        else:
+            x_space = self.__get_app_state()["mp_x_list"]
+            y_space = self.__get_app_state()["mp_y_list"]
+            
+        self.prev_path_limit_dots, = self.subplt.plot(
+            x_space,
+            y_space,
             linestyle='',
             marker='o',
             markerfacecolor='#FF0033',

@@ -1,5 +1,5 @@
 from typing                         import Callable, Dict
-from zope.interface                 import implementer
+from zope.interface                 import implementer, provider
 
 from interfaces.actions.MainWindow  import *
 
@@ -9,10 +9,15 @@ from backend.InterfaceVerificator   import *
 from backend.Exceptions             import *
 from backend.AdditionalFuncs        import *
 
+@InterfaceVerificator.except_if_not_provides(
+    INTERFACE_EXCEPTIONS_MODE,
+    IMainWindowActionsFactory
+)
 @InterfaceVerificator.except_if_not_implements(
     INTERFACE_EXCEPTIONS_MODE,
     IMainWindowActions
 )
+@provider(IMainWindowActionsFactory)
 @implementer(IMainWindowActions)
 class MainWindowActions():
     
@@ -25,6 +30,7 @@ class MainWindowActions():
         set_anim_settings_window_M1_entries_text:   Callable[[str, str], None],
         anim_settings_window_init:                  Callable[[], None],
         anim_settings_window_dismiss:               Callable[[], None],
+        mp_anim_settings_window_dismiss:            Callable[[], None],
         set_a_value:                                Callable[[float], None],
         set_xy_values:                              Callable[[float, float], None],
         err_window_init:                            Callable[
@@ -37,7 +43,10 @@ class MainWindowActions():
         main_window_destroy:                        Callable[[], None],
         show_prev_path:                             Callable[[], None],
         hide_prev_path:                             Callable[[], None],
-        set_prev_path_showed:                       Callable[[bool], None]
+        set_prev_path_showed:                       Callable[[bool], None],
+
+        set_mp_x_list_entry_text:                   Callable[[str], None],
+        set_mp_y_list_entry_text:                   Callable[[str], None]
     ):
         self.__set_outputs                              = set_outputs
         self.__get_app_state                            = get_app_state
@@ -46,6 +55,7 @@ class MainWindowActions():
         self.__set_anim_settings_window_M1_entries_text = set_anim_settings_window_M1_entries_text
         self.__anim_settings_window_init                = anim_settings_window_init
         self.__anim_settings_window_dismiss             = anim_settings_window_dismiss
+        self.__mp_anim_settings_window_dismiss          = mp_anim_settings_window_dismiss
         self.__set_a_value                              = set_a_value
         self.__set_xy_values                            = set_xy_values
         self.__err_window_init                          = err_window_init
@@ -56,6 +66,9 @@ class MainWindowActions():
         self.__hide_prev_path                           = hide_prev_path
         self.__set_prev_path_showed                     = set_prev_path_showed
 
+        self.__set_mp_x_list_entry_text                 = set_mp_x_list_entry_text
+        self.__set_mp_y_list_entry_text                 = set_mp_y_list_entry_text
+
     def calc_btn_click(self, entries: Dict[str, str]) -> None:
         try:
             AdditionalFuncs.primal_entries_validation(entries)
@@ -64,7 +77,12 @@ class MainWindowActions():
 
             self.__set_xy_values(float(entries["x"]), float(entries["y"]))
             self.__set_a_value(float(entries["a"]))
+            
             self.__set_anim_settings_window_M1_entries_text(entries["x"], entries["y"])
+            
+            self.__set_mp_x_list_entry_text(entries["x"])
+            self.__set_mp_y_list_entry_text(entries["y"])
+            
             self.__set_outputs(outputs)
 
             self.__draw_plot_in_main_window()
@@ -103,4 +121,7 @@ class MainWindowActions():
     def destroy(self) -> None:
         if self.__get_app_state()["anim_settings_window_opened"]:
             self.__anim_settings_window_dismiss()
+        if self.__get_app_state()["mp_anim_settings_window_opened"]:
+            self.__mp_anim_settings_window_dismiss()
+        
         self.__main_window_destroy()

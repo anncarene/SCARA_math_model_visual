@@ -1,5 +1,17 @@
-from tkinter                import Event
 from zope.interface         import Interface, Attribute
+
+from components.PlotPicture import *
+
+from actions.MainWindow     import *
+
+class IMainWindowFactory(Interface):
+    """Интерфейс, предоставляемый классом MainWindow"""
+
+    def __call__(
+        actions: MainWindowActions, 
+        plot_picture: PlotPicture
+    ):
+        pass
 
 class IMainWindow(Interface):
     """Интерфейс, реализуемый классом MainWindow"""

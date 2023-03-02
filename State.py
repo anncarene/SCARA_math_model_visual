@@ -1,4 +1,4 @@
-from typing                         import List
+from typing                         import List, Literal
 from zope.interface                 import implementer
 
 from interfaces.State               import *
@@ -41,9 +41,21 @@ class State():
 
         self.moving_mode:       str = None
 
-        self.anim_settings_window_opened:   bool = False
-        self.plot_figure_calced:            bool = False
-        self.prev_path_showed:              bool = False
+        self.anim_settings_window_opened:       bool = False
+        self.plot_figure_calced:                bool = False
+        self.prev_path_showed:                  bool = False
+        self.mp_anim_settings_window_opened:    bool = False
+
+        self.mp_x_list:             List[float]             = []
+        self.mp_y_list:             List[float]             = []
+        self.mp_moving_mode_list:   List[int]  = []
+
+        self.mp_x_list_entry_text:              str = ""
+        self.mp_y_list_entry_text:              str = ""
+        self.mp_moving_mode_list_entry_text:    str = ""
+
+        self.mp_entries_state:  str = "normal"
+        self.mp_btns_state:     str = "normal"
 
         self.prev_path_x_coords: List[float] = []
         self.prev_path_y_coords: List[float] = []

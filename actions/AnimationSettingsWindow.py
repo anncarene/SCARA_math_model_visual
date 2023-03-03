@@ -51,7 +51,10 @@ class AnimationSettingsWindowActions():
         set_mp_x_list_entry_text:                   Callable[[str], None],
         set_mp_y_list_entry_text:                   Callable[[str], None],
         set_mp_widgets_state:                       Callable[[str], None],
-        mp_anim_settings_window_init:               Callable[[], None]
+        mp_anim_settings_window_init:               Callable[[], None],
+        set_mp_x_list:                              Callable[[List[float]], None],
+        set_mp_y_list:                              Callable[[List[float]], None],
+        set_mp_moving_mode_list:                    Callable[[List[int]], None]
     ):
         self.__set_show_prev_path_btn_state             = set_show_prev_path_btn_state
         self.__set_entries_state                        = set_entries_state
@@ -76,6 +79,10 @@ class AnimationSettingsWindowActions():
         
         self.__set_prev_path_coords                     = set_prev_path_coords
         
+        self.__set_mp_x_list                            = set_mp_x_list
+        self.__set_mp_y_list                            = set_mp_y_list
+        self.__set_mp_moving_mode_list                  = set_mp_moving_mode_list
+
         self.__set_mp_x_list_entry_text                 = set_mp_x_list_entry_text
         self.__set_mp_y_list_entry_text                 = set_mp_y_list_entry_text
         
@@ -141,6 +148,10 @@ class AnimationSettingsWindowActions():
 
         self.__set_xy_values(x = xm1, y = ym1)
         self.__set_x2y2_values(x = xm2, y = ym2)
+
+        self.__set_mp_x_list([])
+        self.__set_mp_y_list([])
+        self.__set_mp_moving_mode_list([])
 
         self.__set_entries_state("disabled")
         self.__set_radio_btns_state("disabled")

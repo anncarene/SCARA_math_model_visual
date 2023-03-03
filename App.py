@@ -266,7 +266,10 @@ class App():
                 set_mp_x_list_entry_text        = self.set_mp_x_list_entry_text,
                 set_mp_y_list_entry_text        = self.set_mp_y_list_entry_text,
                 set_mp_widgets_state            = self.set_mp_widgets_state,
-                mp_anim_settings_window_init    = self.mp_anim_settings_window_init
+                mp_anim_settings_window_init    = self.mp_anim_settings_window_init,
+                set_mp_x_list                   = self.set_mp_x_list,
+                set_mp_y_list                   = self.set_mp_y_list,
+                set_mp_moving_mode_list         = self.set_mp_moving_mode_list
             )
         )
 
@@ -300,7 +303,7 @@ class App():
                 set_mp_x_list_entry_text            = self.set_mp_x_list_entry_text,
                 set_mp_y_list_entry_text            = self.set_mp_y_list_entry_text,
                 set_mp_moving_mode_list_entry_text  = self.set_mp_moving_mode_list_entry_text,
-                set_mp_widgets_state                = self.set_mp_widgets_state
+                set_mp_widgets_state                = self.set_mp_widgets_state,
             )
         )
 

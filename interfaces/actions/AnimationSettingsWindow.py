@@ -38,10 +38,15 @@ class IAnimationSettingsWindowActionsFactory(Interface):
         set_prev_path_coords:                       Callable[[List[Tuple[float, float]]], None],
         set_show_prev_path_btn_state:               Callable[[str], None],
 
+        set_mp_x_list:                              Callable[[List[float]], None],
+        set_mp_y_list:                              Callable[[List[float]], None],
+        set_mp_moving_mode_list:                    Callable[[List[int]], None],
+
         set_mp_x_list_entry_text:                   Callable[[str], None],
         set_mp_y_list_entry_text:                   Callable[[str], None],
         set_mp_widgets_state:                       Callable[[str], None],
         mp_anim_settings_window_init:               Callable[[], None]
+
     ): 
         pass
 
@@ -72,6 +77,10 @@ class IAnimationSettingsWindowActions(Interface):
     __set_anim_settings_window_entry_x2_text    = Attribute("Функция из App, влияющая на состояние")
     __set_anim_settings_window_entry_y2_text    = Attribute("Функция из App, влияющая на состояние")
     
+    __set_mp_x_list                             = Attribute("Функция из App, влияющая на состояние")
+    __set_mp_y_list                             = Attribute("Функция из App, влияющая на состояние")
+    __set_mp_moving_mode_list                   = Attribute("Функция из App, влияющая на состояние")
+
     __set_mp_x_list_entry_text                  = Attribute("Функция из App, влияющая на состояние")
     __set_mp_y_list_entry_text                  = Attribute("Функция из App, влияющая на состояние")
     __set_mp_widgets_state                      = Attribute("Функция из App, влияющая на состояние")
